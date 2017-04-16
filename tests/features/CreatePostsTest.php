@@ -38,4 +38,18 @@ class CreatePostsTest extends FeatureTestCase
 		// Then (...nos lleva a la vista para hacer login)
 		$this->seePageIs(route('login'));
 	}
+
+	public function test_create_post_form_validation()
+	{
+		$this->actingAs($this->defaultUser())
+			->visit(route('posts.create'))
+			->press('Publicar')
+			->seePageIs(route('posts.create'))
+			->seeInElement('#field_title .help-block', 'El campo título es obligatorio')
+			->seeInElement('#field_content .help-block', 'El campo contenido es obligatorio');
+
+		// default.blade.php -> vista del componente Styde/Html
+		// donde se especifica que el id empieza por "field_" seguido
+		// del nombre. En nuestro caso field_title y field_content
+	}
 }
