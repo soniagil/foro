@@ -3,7 +3,6 @@
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\Post;
 
 class ShowPostTest extends FeatureTestCase
 {
@@ -14,12 +13,11 @@ class ShowPostTest extends FeatureTestCase
     		'name' => 'Sonia Gil',
     	]);
 
-    	$post = factory(Post::class)->make([
+    	$post = $this->createPost([
     		'title' => 'Como instalar Laravel',
     		'content' => 'Este es el contenido del post',
+            'user_id' => $user->id
     	]);
-
-    	$user->posts()->save($post);
 
     	// Cuando el usuario visite la página del post...
     	$this->visit($post->url)
@@ -33,13 +31,9 @@ class ShowPostTest extends FeatureTestCase
     public function test_old_urls_are_redirected()
     {
         // Having
-        $user = $this->defaultUser();
-
-        $post = factory(Post::class)->make([
+        $post = $this->createPost([
             'title' => 'Old title',
         ]);
-
-        $user->posts()->save($post);
 
         $url = $post->url;
 

@@ -25,8 +25,14 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Post::class, function (Faker\Generator $faker) {
     return [
-        'title' => $faker->sentence,
+        'title'   => $faker->sentence,
         'content' => $faker->paragraph,
-        'pending' => $faker->boolean()
+        'pending' => $faker->boolean(),
+        // función anónima que se ejecuta solo en el caso de que
+        // al crear un Post no le indiquemos a qué usuario pertenece
+        // dicho Post.
+        'user_id' => function () {
+            return factory(\App\User::class)->create()->id;
+        },
     ];
 });
